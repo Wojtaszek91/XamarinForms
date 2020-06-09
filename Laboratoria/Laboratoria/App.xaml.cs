@@ -8,9 +8,8 @@ namespace Laboratoria
     {
         public App()
         {
+            MainPage = new TabMainPage();
             InitializeComponent();
-
-            MainPage = new NavigationPage(new HomePage());
         }
 
         protected override void OnStart()

@@ -10,16 +10,11 @@ using Xamarin.Forms.Xaml;
 namespace Laboratoria
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class HomePage : ContentPage
+    public partial class Settings : ContentPage
     {
-        public HomePage()
+        public Settings()
         {
             InitializeComponent();
-        }
-
-        private async void NavitageToDetailsPage(object sender, EventArgs e)
-        {
-           await Navigation.PushAsync(new DetailsPage());
         }
     }
 }
