@@ -7,14 +7,19 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace Laboratoria.Views.Controls
+namespace Laboratoria
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class CurrenciesDetails : ContentPage
+    public partial class HomePage : ContentPage
     {
-        public CurrenciesDetails()
+        public HomePage()
         {
             InitializeComponent();
+        }
+
+        private async void NavitageToDetailsPage(object sender, EventArgs e)
+        {
+           await Navigation.PushAsync(new DetailsPage());
         }
     }
 }

@@ -13,12 +13,14 @@
   <ItemGroup>
     <Compile Remove="Styles\Page1.xaml.cs" />
     <Compile Remove="Views\Controls\ContentWithHeader.xaml.cs" />
+    <Compile Remove="Views\Controls\CurrenciesDetails.xaml.cs" />
     <Compile Remove="Views\Controls\View1.xaml.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Remove="Styles\Styles.resx" />
     <EmbeddedResource Remove="Views\Controls\ContentWithHeader.xaml" />
+    <EmbeddedResource Remove="Views\Controls\CurrenciesDetails.xaml" />
     <EmbeddedResource Remove="Views\Controls\View1.xaml" />
   </ItemGroup>
 
@@ -28,13 +30,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="DetailsPage.xaml.cs">
+      <DependentUpon>DetailsPage.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="HomePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Styles\Colors.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Styles\Styles.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\Controls\CurrenciesDetails.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Controls\Details.xaml">
