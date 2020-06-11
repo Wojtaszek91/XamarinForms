@@ -5,10 +5,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              xmlns:controls="clr-namespace:Laboratoria.Views.Controls"
+             xmlns:viewModels="clr-namespace:Laboratoria.ViewModels"
              x:Class="Laboratoria.DetailsPage"
              Title="Details Page"
              Style="{StaticResource DetailsPageStyle}"
              >
+    <ContentPage.BindingContext>
+        <viewModels:DetailsViewModel/>
+    </ContentPage.BindingContext>
     <ScrollView>
         <Grid>
             <StackLayout Style="{StaticResource DetailsLayoutStyle}">
@@ -17,7 +21,7 @@
                 <Label.FormattedText>
                     <FormattedString>
                         <Span
-                             Text="56"
+                             Text="{Binding CAQI}"
                              Style="{StaticResource CaqiValueSpanStyle}"/>
                         <Span
                             Text="{x:Static x:Environment.NewLine}"/>
