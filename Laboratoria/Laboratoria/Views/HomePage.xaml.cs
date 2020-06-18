@@ -17,6 +17,7 @@ namespace Laboratoria
         {
             InitializeComponent();
             BindingContext = new HomeViewModel(Navigation);
+
         }
     }
 }

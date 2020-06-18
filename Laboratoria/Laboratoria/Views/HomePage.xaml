@@ -8,7 +8,16 @@
              x:Class="Laboratoria.HomePage">
     <ContentPage.Content>
         <StackLayout>
-            <Button Text="Podglad szczegolow" Command="{Binding NavigateToDetailsPageCommand}"/>
+            <!--<Button Text="Podglad szczegolow" Command="{Binding NavigateToDetailsPageCommand}"/>-->
+            <ListView x:Name="MeasurementsListView" BindingContext="MeasurmentsList" SeparatorColor="CadetBlue" SelectionMode="None">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding InstallationsList.Address.Description}"
+                              Detail="{Binding CurrentDisplayValue, StringFormat='CAQI: {0}'}"
+                                  />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
             <Label Text="{Binding location}"/>
         </StackLayout>
     </ContentPage.Content>

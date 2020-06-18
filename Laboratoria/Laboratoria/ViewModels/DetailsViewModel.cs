@@ -8,106 +8,48 @@ using Xamarin.Forms;
 
 namespace Laboratoria.ViewModels
 {
-    class DetailsViewModel : INotifyPropertyChanged
+    class DetailsViewModel : BaseViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
         private int _CAQI;
         public int CAQI
         {
             get => _CAQI;
-            set
-            {
-                if (_CAQI == value)
-                    return;
-                _CAQI = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref _CAQI, value);
         }
         private string _airQuality;
         public string airQuality { get => _airQuality;
-            set
-            {
-                if (_airQuality == value)
-                    return;
-                _airQuality = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref _airQuality, value);
         }
         private string _description;
         public string description {
             get => _description;
-            set
-            {
-                if (_description == value)
-                    return;
-                _description = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref _description, value);
         }
         private int _pm25Value;
         public int pm25Value { get => _pm25Value;
-            set
-            {
-                if (_pm25Value == value)
-                    return;
-                _pm25Value = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref _pm25Value, value);
         }
         private int _pm25Percent;
         public int pm25Percent { get => _pm25Percent;
-            set
-            {
-                if (_pm25Percent == value)
-                    return;
-                _pm25Percent = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref _pm25Percent, value);
         }
         private int _pm10Value;
         public int pm10Value { get => _pm10Value;
-            set
-            {
-                if (_pm10Value == value)
-                    return;
-                _pm10Value = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref _pm10Value, value);
         }
         private int _pm10Percent;
         public int pm10Percent { get => _pm10Percent;
-            set {
-                if (_pm10Percent == value)
-                    return;
-                _pm10Percent = value;
-                OnPropertyChanged();
-                    } 
+            set => SetProperty(ref _pm10Percent, value); 
         }
         private double _humidityValue;
         public double humidityValue { get => _humidityValue;
-            set 
-            {
-                if (_humidityValue == value)
-                    return;
-                _humidityValue = value;
-                OnPropertyChanged();
-            } 
+            set => SetProperty(ref _humidityValue, value);
         }
         private int _pressureValue;
         public int pressureValue
         {
             get => _pressureValue;
-            set
-            {
-                if (_pressureValue == value)
-                    return;
-                _pressureValue = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref _pressureValue, value);
         }
     }
 }
