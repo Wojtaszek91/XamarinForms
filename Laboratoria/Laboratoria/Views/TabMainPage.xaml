@@ -18,7 +18,4 @@
             <views:Settings/>
         </x:Arguments>
     </NavigationPage>
-    <ContentPage Title="Tab 1" />
-  <ContentPage Title="Tab 2" />
-  <ContentPage Title="Tab 3" />
 </TabbedPage>

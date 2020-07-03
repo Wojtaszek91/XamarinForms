@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Laboratoria.Models;
+using Laboratoria.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -8,14 +10,14 @@ using Xamarin.Forms;
 
 namespace Laboratoria
 {
-    // Learn more about making custom code visible in the Xamarin.Forms previewer
-    // by visiting https://aka.ms/xamarinforms-previewer
-    [DesignTimeVisible(false)]
     public partial class DetailsPage : ContentPage
     {
-        public DetailsPage()
+        public DetailsPage(Measurements item)
         {
             InitializeComponent();
+
+            (BindingContext as DetailsViewModel).Item = item;
+            
         }
 
         private void Help_Clicked(object sender, EventArgs e)

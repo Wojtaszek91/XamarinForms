@@ -104,10 +104,10 @@
             <controls:Details.ControlContent>
                 <StackLayout>
                     <Label
-                                Text="{Binding humidityValue, Converter={StaticResource PercentValue}, StringFormat='{0}%'}"
+                                Text="{Binding humidityValue, StringFormat='{0}%'}"
                                 Style="{StaticResource NormalTextLabelStyle}"/>
                     <Slider
-                                Value="{Binding humidityValue}"
+                                Value="{Binding humidityValue, Converter={StaticResource PercentValue}, Mode=OneWay}"
                                 Style="{StaticResource SliderStyle}"/>
                 </StackLayout>
             </controls:Details.ControlContent>
@@ -118,10 +118,12 @@
             <controls:Details.ControlContent>
                 <StackLayout>
                             <Label
-                                Text="{Binding pressureValue, Converter={StaticResource PercentValue}, StringFormat='{0}%'}"
+                                Text="{Binding pressureValue, StringFormat='{0} hPa'}"
                                 Style="{StaticResource NormalTextLabelStyle}"/>
                             <Slider 
-                                Value="{Binding pressureValue}"
+                                Value="{Binding pressureValue, Mode=OneWay}"
+                                Maximum="1100"
+                                Minimum="900"
                                 Style="{StaticResource SliderStyle}"/>
                 </StackLayout>
             </controls:Details.ControlContent>

@@ -5,12 +5,16 @@ using Newtonsoft.Json.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-
+using AutoMapper;
+using Xamarin.Forms.Xaml;
+using Laboratoria.Models;
 
 namespace Laboratoria
 {
     public partial class App : Application
     {
+        static StreamReader GetReader(Stream stream) => new StreamReader(stream);
+        public static DataBaseContext dbContext { get; set; }
         public static string AirlyApiKey { get; private set; }
         public static string AirlyApiUrl { get; private set; }
         public static string AirlyApiMeasurementUrl { get; private set; }
@@ -19,40 +23,31 @@ namespace Laboratoria
         public App()
         {
             InitializeComponent();
-           var initialize = InitializeApp();
+            _ = InitializeApp();
+         //   _mapper.mapper.Map<Measurements>(new MeasurmentsEntity());
         }
 
         private async Task InitializeApp()
         {
-            MainPage = new TabMainPage();
             await LoadConfiguration();
+            MainPage = new TabMainPage();
+       //     dbContext = new DataBaseContext();
         }
 
         private static async Task LoadConfiguration()
+
         {
             var assembly = Assembly.GetAssembly(typeof(App));
-            var resourceNames = assembly.GetManifestResourceNames();
-            var configName = resourceNames.FirstOrDefault(config => config.Contains("config.json"));
-
-            using (var stream = assembly.GetManifestResourceStream(configName))
-            {
-                var reader = GetReader(stream);
-                {
-                    var json = await reader.ReadToEndAsync();
-                    var dynamicJson = JObject.Parse(json);
+            var dynamicJson = JObject.Parse(await GetReader(assembly.GetManifestResourceStream(assembly.
+                GetManifestResourceNames().FirstOrDefault(c => c.Contains("configuration.json")))).
+                ReadToEndAsync());
 
                     AirlyApiKey = dynamicJson["AirlyApiKey"].Value<string>();
                     AirlyApiUrl = dynamicJson["AirlyApiUrl"].Value<string>();
                     AirlyApiMeasurementUrl = dynamicJson["AirlyApiMeasurementUrl"].Value<string>();
-                    AirlyApiInstallationUrl = dynamicJson["AirlyApiInstallationUrl"].Value<string>();
-                }
-            }
+                    AirlyApiInstallationUrl = dynamicJson["AirlyApiInstallationUrl"].Value<string>();           
         }
 
-        private static StreamReader GetReader(Stream stream)
-        {
-            return new StreamReader(stream);
-        }
 
         protected override void OnStart()
         {

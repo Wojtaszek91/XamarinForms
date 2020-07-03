@@ -20,6 +20,7 @@ namespace Laboratoria.ViewModels
     {
         readonly INavigation _navigation;
         private ICommand _navigateToDetailsPageCommand;
+        private Location _location;
         private List<Measurements> _MeasurmentsList;
         public List<Measurements> MeasurmentsList
         {
@@ -34,30 +35,34 @@ namespace Laboratoria.ViewModels
         }
 
         public ICommand NavigateToDetailsPageCommand =>
-            _navigateToDetailsPageCommand ?? (_navigateToDetailsPageCommand = new Command(NavitageToDetailsPage));
+            _navigateToDetailsPageCommand ?? (_navigateToDetailsPageCommand = new Command<Measurements>(NavitageToDetailsPage));
 
         public HomeViewModel(INavigation navigation)
         {
             _navigation = navigation;
-            var location = GetLocation();
-            var initialize = Initialize();
+            _ = Initialize();
         }
 
-        private void NavitageToDetailsPage()
+        private void NavitageToDetailsPage(Measurements item)
         {
-            _navigation.PushAsync(new DetailsPage());
+            _navigation.PushAsync(new DetailsPage(item));
         }
 
         private async Task Initialize()
         {
             IsBusy = true;
+         
+            if(_location != await GetLocation() &&  
+                DateTime.Now > DateTime.Now.Subtract(TimeSpan.FromHours(1)) ){
+                _location = await GetLocation();
+                var InstallationsList = await GetInstallations(_location, maxResults: 3);
+           //     App.dbContext.SaveInstallationsList(InstallationsList);
+                var data = await GetMeasurementsForInstallations(InstallationsList);
+            //    App.dbContext.SaveAllMeasurements(data);
+                MeasurmentsList = new List<Measurements>(data);
 
-            var location = await GetLocation();
-            var installationsList = await GetInstallations(location, maxResults: 3);
-            var data = await GetMeasurementsForInstallations(installationsList);
-            MeasurmentsList = new List<Measurements>(data);
-
-            IsBusy = false;
+                IsBusy = false;
+            }
         }
 
 
@@ -77,13 +82,13 @@ namespace Laboratoria.ViewModels
                 { "maxDistanceKM", maxDistanceInKm },
                 { "maxResults", maxResults }
             });
-
+            
             return await GetHttpResponseAsync<IEnumerable<Installations>>(GetAirlyApiUrl(App.AirlyApiInstallationUrl, query));
         }
 
-        private async Task<IEnumerable<Measurements>> GetMeasurementsForInstallations(IEnumerable<Installations> installations)
+        private async Task<IEnumerable<Measurements>> GetMeasurementsForInstallations(IEnumerable<Installations> InstallationsList)
         {
-            if (installations == null)
+            if (InstallationsList == null)
             {
                 System.Diagnostics.Debug.WriteLine("No installations data.");
                 return null;
@@ -91,7 +96,7 @@ namespace Laboratoria.ViewModels
 
             var measurements = new List<Measurements>();
 
-            foreach (var installation in installations)
+            foreach (var installation in InstallationsList)
             {
                 var query = GetQuery(new Dictionary<string, object>
                 {
@@ -146,6 +151,10 @@ namespace Laboratoria.ViewModels
             {
                 System.Diagnostics.Debug.WriteLine(ex);
             }
+            catch(JsonSerializationException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex);
+            }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex);
@@ -173,9 +182,10 @@ namespace Laboratoria.ViewModels
         }
         private static HttpClient GetClientWithHeaders()
         {
-            var client = new HttpClient();
-
-            client.BaseAddress = new Uri(App.AirlyApiUrl);
+            var client = new HttpClient()
+            {
+                BaseAddress = new Uri(App.AirlyApiUrl),
+            };
 
             client.DefaultRequestHeaders.Add("Accept", "application/json");
             client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip");
@@ -185,25 +195,42 @@ namespace Laboratoria.ViewModels
         }
         private string GetAirlyApiUrl(string path, string query)
         {
-            var builder = new UriBuilder(App.AirlyApiUrl);
-            builder.Port = -1;
+            var builder = new UriBuilder(App.AirlyApiUrl)
+            {
+                Port = -1,
+                Query = query
+            };
             builder.Path += path;
-            builder.Query = query;
 
             return builder.ToString();
         }
+
         private async Task<Location> GetLocation()
         {
             try
             {
-                return await Geolocation.GetLastKnownLocationAsync() 
-                    ?? await Geolocation.GetLocationAsync(new GeolocationRequest(GeolocationAccuracy.Low));
+                return await Geolocation.GetLastKnownLocationAsync()
+                   ?? await Geolocation.GetLocationAsync(new GeolocationRequest(GeolocationAccuracy.Medium));
             }
-            catch (Exception e)
+            catch (FeatureNotSupportedException ex)
             {
-                Console.WriteLine(e.Message);
-                return null;
+                System.Diagnostics.Debug.WriteLine(ex);
             }
+            catch (FeatureNotEnabledException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex);
+            }
+            catch (PermissionException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex);
+            }
+
+            return null;
         }
-    }
+    
+}
 }
